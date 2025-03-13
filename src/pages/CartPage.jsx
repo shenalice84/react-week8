@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import Swiper from "swiper";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
+import { useDispatch } from "react-redux";
+import { updateCartData } from "../redux/cartSlice";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
@@ -15,11 +17,13 @@ export default function CartPage() {
   const [cart, setCart] = useState({});
   const [isScreenLoading, setIsScreenLoading] = useState(false);
   const swiperRef = useRef(null)
+  const dispatch = useDispatch()
 
   const getCart = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/v2/api/${API_PATH}/cart`);
       setCart(res.data.data);
+      dispatch(updateCartData(res.data.data))
     } catch (error) {
       console.log(error);
     }
